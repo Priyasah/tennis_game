@@ -1,0 +1,110 @@
+	<!DOCTYPE html>
+	<html>
+	<head>
+		<title></title>
+
+	</head>
+	<body>
+
+<canvas id="gameCanvas" width="800" height="600"></canvas>
+
+
+
+
+	<script>
+			var canvas;
+			var canvasContext;
+			var ballY=50;
+			var ballX = 50;
+			var speedX = 5;
+			var speedY = 3;
+			var paddle1Y = 250;
+			var paddle2Y =250;
+			const PADDLE_HEIGHT = 100;
+
+
+			function calculateMousePos(evt){
+
+				var rect = canvas.getBoundingClientRect();
+				var root = document.documentElement;
+				var mouseX = evt.clientX-rect.left-root.scrollLeft;
+			var mouseY = evt.clientY-rect.top-root.scrollTop;
+
+			return{
+				x:mouseX,
+				y:mouseY
+			};
+			}
+ 
+
+			window.onload = function(){
+				canvas = document.getElementById('gameCanvas');
+				canvasContext = canvas.getContext('2d');
+				var framespersec=50;
+				setInterval(function()
+				{
+
+
+				moveEverything();
+				drawEverything();
+
+
+				},1000/framespersec);
+
+				canvas.addEventListener('mousemove',function(evt){
+					var mousePos=calculateMousePos(evt);
+					paddle1Y=mousePos.y-PADDLE_HEIGHT/2;
+					console.log(paddle1Y);				
+			});
+				
+			
+			}
+
+			
+
+
+			function drawEverything()
+			{
+				
+			colorRect(0,0,canvas.width,canvas.height,'black');
+			colorRect(5,paddle1Y,10,PADDLE_HEIGHT,'white');
+				colorRect(canvas.width-15,paddle2Y,10,PADDLE_HEIGHT,'white');
+			colorCircle(ballX,ballY,Math.PI*2,true,'white');
+			
+
+			}
+
+
+			function colorCircle(centerX,centerY,radius,color)
+			{
+				canvasContext.fillStyle=color;
+			canvasContext.beginPath();
+			canvasContext.arc(centerX,centerY,radius,0,Math.PI*2,true);
+			canvasContext.fill();
+
+			}
+
+			function moveEverything(){
+				ballX+=speedX;
+				ballY+=speedY;
+				if(ballX>canvas.width-30 || ballX<15){
+					speedX*=-1;
+				}
+				else if(ballY>canvas.height || ballY<0)
+				{
+					speedY*=-1;
+				}
+
+			}
+
+			function colorRect(leftX,topY,width,height,color){
+				canvasContext.fillStyle = color;
+				canvasContext.fillRect(leftX,topY,width,height);
+
+			}
+
+			
+		</script>
+	
+	</body>
+	</html>
